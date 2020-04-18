@@ -1,0 +1,5 @@
+*.js
+src/assets
+public
+dist
+*.vue

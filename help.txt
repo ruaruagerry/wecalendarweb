@@ -1,0 +1,15 @@
+INSERT INTO getoutrecord ( id, name, getoutmoney, createtime, status )
+VALUES  ( 1, 1, 1, "2019-12-13 00:00:00", 0);
+
+
+INSERT INTO getoutrecord ( id, name, getoutmoney, createtime, status )
+VALUES  ( 2, 2, 2, "2019-12-14 00:00:00", 0);
+
+
+在线访问模板：
+https://panjiachen.gitee.io/vue-element-admin/#/login?redirect=%2Fdashboard
+
+创建账号：
+http://127.0.0.1:3004/auth/web/add?account=admin&password=111111&nick=xiaoluo&protrait=https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif&key=UXnezMezvpLnQre6XvhdWpHxiWFSrBZR
+
+
