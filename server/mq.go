@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
-	"weagentweb/pb"
-	"weagentweb/servercfg"
+	"wecalendarweb/pb"
+	"wecalendarweb/servercfg"
 
 	"github.com/golang/protobuf/proto"
 	log "github.com/sirupsen/logrus"

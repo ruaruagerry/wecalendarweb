@@ -16,13 +16,14 @@ import (
 	"runtime/pprof"
 	"strconv"
 	"time"
-	"weagentweb/gamecfg"
-	"weagentweb/server"
-	"weagentweb/servercfg"
+	"wecalendarweb/gamecfg"
+	"wecalendarweb/server"
+	"wecalendarweb/servercfg"
 
-	_ "weagentweb/handles/auth"
-	_ "weagentweb/handles/file"
-	_ "weagentweb/handles/money"
+	_ "wecalendarweb/handles/auth"
+	_ "wecalendarweb/handles/divination"
+	_ "wecalendarweb/handles/file"
+	_ "wecalendarweb/handles/money"
 
 	log "github.com/sirupsen/logrus"
 )

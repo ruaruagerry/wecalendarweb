@@ -3,11 +3,11 @@ package money
 import (
 	"encoding/json"
 	"time"
-	"weagentweb/gconst"
-	"weagentweb/pb"
-	"weagentweb/rconst"
-	"weagentweb/server"
-	"weagentweb/tables"
+	"wecalendarweb/gconst"
+	"wecalendarweb/pb"
+	"wecalendarweb/rconst"
+	"wecalendarweb/server"
+	"wecalendarweb/tables"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/golang/protobuf/proto"
@@ -73,7 +73,7 @@ func getoutResultHandle(c *server.StupidContext) {
 	// 检查
 	conn.Send("MULTI")
 	conn.Send("SETNX", rconst.StringLockMoneyGetoutResultPrefix+playerid, "1")
-	conn.Send("EXPIRE", rconst.StringLockMoneyGetoutResultPrefix+playerid, rconst.LockTime)
+	conn.Send("EXPIRE", rconst.StringLockMoneyGetoutResultPrefix+playerid, gconst.LockTime)
 	redisMDArray, err := redis.Values(conn.Do("EXEC"))
 	if err != nil {
 		httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))

@@ -39,6 +39,54 @@ const (
 	ErrHTTPTooFast = Error(14)
 	// ErrPassword 密码错误
 	ErrPassword = Error(15)
+
+	/* auth 100-199 */
+	// ErrAuthGetWexinUserInfo 获取微信用户信息失败
+	ErrAuthGetWexinUserInfo = Error(100)
+	// ErrAuthGetWeixinPlusInfo 获取微信额外信息失败
+	ErrAuthGetWeixinPlusInfo = Error(101)
+	// ErrAuthNotFindOpenID 没找到用户Openid
+	ErrAuthNotFindOpenID = Error(102)
+
+	/* setup 1000-1099 */
+	// ErrSetupCardCode 身份证格式错误
+	ErrSetupCardCode = Error(1000)
+	// ErrSetupRealNick 身份证名称格式错误
+	ErrSetupRealNick = Error(1001)
+	// ErrSetupAlreadyRealCheck 已进行过实名认证
+	ErrSetupAlreadyRealCheck = Error(1002)
+	// ErrSetupExistCardCode 实名信息已存在
+	ErrSetupExistCardCode = Error(1003)
+
+	/* phone 1100-1199 */
+	// ErrPhoneFormat 手机号格式错误
+	ErrPhoneFormat = Error(1100)
+	// ErrPhoneGetCodeFast 获取验证码过快
+	ErrPhoneGetCodeFast = Error(1101)
+	// ErrPhoneSendMsg 发送验证码失败
+	ErrPhoneSendMsg = Error(1102)
+	// ErrPhoneAlreadyBind 已绑定手机号
+	ErrPhoneAlreadyBind = Error(1103)
+	// ErrPhoneCode 验证码错误
+	ErrPhoneCode = Error(1104)
+	// ErrPhoneHasBinded 手机号码已被绑定
+	ErrPhoneHasBinded = Error(1105)
+
+	/* money 1200-1299 */
+	// ErrMoneyInvalidGetout 提现金额错误
+	ErrMoneyInvalidGetout = Error(1200)
+	// ErrMoneyNotEnough 提现金额不足
+	ErrMoneyNotEnough = Error(1201)
+
+	/* divination 1300-1399 */
+	// ErrContentSensitive 吐槽包含敏感词
+	ErrContentSensitive = Error(1300)
+	// ErrContentLenNotEnough 有效字符不足10位
+	ErrContentLenNotEnough = Error(1301)
+	// ErrNoDivination 当日没有吐槽
+	ErrNoDivination = Error(1302)
+	// ErrNoDivinationBest 当日还没有最佳吐槽
+	ErrNoDivinationBest = Error(1303)
 )
 
 var errMsg = map[Error]string{

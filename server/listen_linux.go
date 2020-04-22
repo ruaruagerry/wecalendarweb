@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
-	"weagentweb/servercfg"
 	"net/http"
+	"wecalendarweb/servercfg"
 
 	"github.com/fvbock/endless"
 	"github.com/rs/cors"

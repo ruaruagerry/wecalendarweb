@@ -1,7 +1,7 @@
 package login
 
 import (
-	"weagentweb/server"
+	"wecalendarweb/server"
 )
 
 func init() {

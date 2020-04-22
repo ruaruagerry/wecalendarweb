@@ -3,8 +3,8 @@ package server
 import (
 	"flag"
 	"fmt"
-	"weagentweb/servercfg"
-	"weagentweb/tables"
+	"wecalendarweb/servercfg"
+	"wecalendarweb/tables"
 
 	// import mysql
 	_ "github.com/go-sql-driver/mysql"

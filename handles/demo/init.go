@@ -3,7 +3,7 @@ package demo
 import (
 	"math/rand"
 	"time"
-	"weagentweb/server"
+	"wecalendarweb/server"
 )
 
 var (

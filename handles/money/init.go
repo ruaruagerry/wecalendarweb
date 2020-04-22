@@ -1,7 +1,7 @@
 package money
 
 import (
-	"weagentweb/server"
+	"wecalendarweb/server"
 )
 
 func init() {

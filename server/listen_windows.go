@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"weagentweb/servercfg"
 	"time"
+	"wecalendarweb/servercfg"
 
 	"github.com/rs/cors"
 )

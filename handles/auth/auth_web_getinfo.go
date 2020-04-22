@@ -3,10 +3,10 @@ package auth
 import (
 	"encoding/json"
 	"strconv"
-	"weagentweb/gconst"
-	"weagentweb/pb"
-	"weagentweb/server"
-	"weagentweb/tables"
+	"wecalendarweb/gconst"
+	"wecalendarweb/pb"
+	"wecalendarweb/server"
+	"wecalendarweb/tables"
 
 	"github.com/golang/protobuf/proto"
 )

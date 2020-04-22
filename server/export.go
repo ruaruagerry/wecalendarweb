@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"weagentweb/gconst"
-	"weagentweb/pb"
+	"wecalendarweb/gconst"
+	"wecalendarweb/pb"
 
 	"github.com/golang/protobuf/proto"
 

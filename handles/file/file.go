@@ -2,8 +2,8 @@ package login
 
 import (
 	"strings"
-	"weagentweb/assets"
-	"weagentweb/server"
+	"wecalendarweb/assets"
+	"wecalendarweb/server"
 )
 
 func onServeFile(ctx *server.StupidContext) {

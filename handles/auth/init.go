@@ -1,6 +1,6 @@
 package auth
 
-import "weagentweb/server"
+import "wecalendarweb/server"
 
 func init() {
 	server.RegisterPostHandleNoUserID("/auth/web/login", webLoginHandle)
