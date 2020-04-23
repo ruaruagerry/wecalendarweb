@@ -19,6 +19,12 @@ const weagentRouter = {
             meta: { title: '收益审核' }
         },
         {
+            path: 'divination-record',
+            component: () => import('@/views/weAgent/divination-record'),
+            name: 'DivinationRecord',
+            meta: { title: '吐槽列表' }
+        },
+        {
             path: 'dynamic-table',
             component: () => import('@/views/table/dynamic-table/index'),
             name: 'DynamicTable',

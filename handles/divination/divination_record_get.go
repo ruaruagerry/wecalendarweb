@@ -14,6 +14,8 @@ import (
 
 type divinationRecordGetReq struct {
 	NowData string `json:"nowdata"`
+	Start   int32  `json:"start"`
+	End     int32  `json:"end"`
 }
 
 type divinationRecordGetItem struct {
@@ -53,7 +55,7 @@ func divinationRecordGetHandle(c *server.StupidContext) {
 
 	// redis multi get
 	conn.Send("MULTI")
-	conn.Send("ZRANGE", rconst.ZSetDivinationRecordPrefix+req.NowData, 0, -1)
+	conn.Send("ZRANGE", rconst.ZSetDivinationRecordPrefix+req.NowData, req.Start, req.End)
 	redisMDArray, err := redis.Values(conn.Do("EXEC"))
 	if err != nil {
 		httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))

@@ -53,3 +53,49 @@ export function getInfo () {
     })
 }
 
+export function divinationRecordGet (data) {
+    return request({
+        url: rootUrl + '/divination/record/get',
+        method: 'post',
+        data
+    })
+}
+
+export function divinationRecordAdd (data) {
+    return request({
+        url: rootUrl + '/divination/record/add',
+        method: 'post',
+        data
+    })
+}
+
+export function divinationRecordDel (data) {
+    return request({
+        url: rootUrl + '/divination/record/del',
+        method: 'post',
+        data
+    })
+}
+
+export function divinationRecordSetBest (data) {
+    return request({
+        url: rootUrl + '/divination/record/setbest',
+        method: 'post',
+        data
+    })
+}
+
+export function divinationGetBest (data) {
+    return request({
+        url: rootUrl + '/divination/getbest',
+        method: 'post',
+        data
+    })
+}
+
+export function divinationRecordCount () {
+    return request({
+        url: rootUrl + '/divination/record/count',
+        method: 'get'
+    })
+}

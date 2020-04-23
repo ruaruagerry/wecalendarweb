@@ -10,4 +10,5 @@ func init() {
 	server.RegisterGetHandle("/divination/record/del", divinationRecordDelHandle)
 	server.RegisterGetHandle("/divination/record/setbest", divinationRecordSetBestHandle)
 	server.RegisterGetHandle("/divination/getbest", divinationRecordGetBestHandle)
+	server.RegisterGetHandle("/divination/record/count", divinationRecordCountHandle)
 }
