@@ -165,6 +165,7 @@ export default {
         this.getList()
     },
     methods: {
+        // 添加吐槽
         handleAddDivination () {
             this.divination = {
                 name: "",
@@ -174,6 +175,7 @@ export default {
             this.dialogVisible = true
             this.confirmVisible = true
         },
+        // 提交新增吐槽
         confirmDivination () {
             var params = {
                 nowdata: dateToString(this.time),
@@ -195,6 +197,7 @@ export default {
                 this.refreshList()
             })
         },
+        // 获取吐槽总数
         async getCount () {
             var params = {
                 nowdata: dateToString(this.time),
@@ -204,10 +207,12 @@ export default {
                 this.total = response.count
             })
         },
+        // 刷新界面
         refreshList () {
             this.listQuery.page = Math.floor((this.total - 1) / this.listQuery.limit) + 1
             this.getList()
         },
+        // 获取吐槽列表
         getList () {
             this.listLoading = true
 
@@ -236,6 +241,7 @@ export default {
                 }, 1.5 * 1000)
             })
         },
+        // 删除吐槽
         handleDelDivination (row) {
             var params = {
                 nowdata: dateToString(this.time),
@@ -252,6 +258,7 @@ export default {
                 this.refreshList()
             })
         },
+        // 设为当日最佳吐槽
         handleSetBest (row) {
             var params = {
                 nowdata: dateToString(this.time),
@@ -266,6 +273,7 @@ export default {
                 })
             })
         },
+        // 获取当日最佳吐槽
         handleBestDivination () {
             var params = {
                 nowdata: dateToString(this.time),
