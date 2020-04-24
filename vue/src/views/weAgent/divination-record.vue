@@ -5,32 +5,40 @@
                         format="yyyy-MM-dd"
                         placeholder="Release time" />
         <el-button type="primary"
-                   @click="handleAddDivination">New Divination</el-button>
+                   @click="handleAddDivination">新建吐槽</el-button>
+        <el-button type="primary"
+                   @click="handleBestDivination">最佳吐槽</el-button>
 
         <el-dialog :visible.sync="dialogVisible"
                    :title="'New Divination'">
             <el-form :model="divination"
                      label-width="80px"
                      label-position="left">
-                <el-form-item label="name">
+                <el-form-item v-if="!confirmVisible"
+                              label="用户ID">
+                    <el-input v-model="divination.playerid"
+                              v-bind:disabled="true" />
+                </el-form-item>
+                <el-form-item label="昵称">
                     <el-input v-model="divination.name"
-                              placeholder="name" />
+                              v-bind:disabled="!confirmVisible" />
                 </el-form-item>
-                <el-form-item label="portrait">
+                <el-form-item label="头像">
                     <el-input v-model="divination.portrait"
-                              placeholder="portrait" />
+                              v-bind:disabled="!confirmVisible" />
                 </el-form-item>
-                <el-form-item label="content">
+                <el-form-item label="文本">
                     <el-input v-model="divination.content"
                               :autosize="{ minRows: 2, maxRows: 4}"
-                              type="textarea"
-                              placeholder="content" />
+                              v-bind:disabled="!confirmVisible"
+                              type="textarea" />
                 </el-form-item>
             </el-form>
             <div style="text-align:right;">
                 <el-button type="danger"
                            @click="dialogVisible=false">Cancel</el-button>
                 <el-button type="primary"
+                           v-if="confirmVisible"
                            @click="confirmDivination">Confirm</el-button>
             </div>
         </el-dialog>
@@ -41,46 +49,46 @@
                   border
                   fit
                   highlight-current-row>
-            <el-table-column label="id"
+            <el-table-column label="用户ID"
                              prop="id"
-                             width="80"
+                             width="100"
                              align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.playerid }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="divinationid"
+            <el-table-column label="吐槽ID"
                              prop="divinationid"
                              align="center"
-                             width="80">
+                             width="100">
                 <template slot-scope="{row}">
                     <span>{{ row.divinationid }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="nickname"
+            <el-table-column label="昵称"
                              prop="nickname"
                              align="center"
-                             width="180">
+                             width="120">
                 <template slot-scope="{row}">
                     <span>{{ row.nickname }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="content"
+            <el-table-column label="文本"
                              prop="content"
                              align="center"
-                             width="280">
+                             width="740">
                 <template slot-scope="{row}">
                     <span>{{ row.content }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="time"
-                             width="300"
+            <el-table-column label="生成时间"
+                             width="278"
                              align="center">
                 <template slot-scope="{row}">
                     <span>{{ row.time | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="Actions"
+            <el-table-column label="操作"
                              align="center"
                              width="330"
                              class-name="small-padding fixed-width">
@@ -92,8 +100,8 @@
                     </el-button>
                     <el-button size="mini"
                                type="danger"
-                               @click="handleSetBest(row, 1)">
-                        设置最佳
+                               @click="handleSetBest(row)">
+                        最佳
                     </el-button>
                 </template>
             </el-table-column>
@@ -111,7 +119,7 @@
 import waves from '@/directive/waves' // waves directive
 import { parseTime, dateToString } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { divinationRecordGet, divinationRecordDel, divinationRecordCount, divinationRecordSetBest, divinationRecordAdd } from '@/api/weagent'
+import { divinationRecordGet, divinationRecordDel, divinationRecordCount, divinationRecordSetBest, divinationRecordAdd, divinationGetBest } from '@/api/weagent'
 
 export default {
     name: 'DivinationRecord',
@@ -132,8 +140,10 @@ export default {
         return {
             time: new Date(),
 
+            confirmVisible: true,
             dialogVisible: false,
             divination: {
+                playerid: "",
                 name: "",
                 portrait: "",
                 content: "",
@@ -143,9 +153,10 @@ export default {
             list: null,
             total: 0,
             listLoading: true,
+            lastpage: 0,
             listQuery: {
                 page: 1,
-                limit: 20,
+                limit: 10,
                 playerid: '',
             },
         }
@@ -155,57 +166,79 @@ export default {
     },
     methods: {
         handleAddDivination () {
+            this.divination = {
+                name: "",
+                portrait: "",
+                content: "",
+            }
             this.dialogVisible = true
+            this.confirmVisible = true
         },
         confirmDivination () {
-            console.log("!!time:", dateToString(this.time))
+            var params = {
+                nowdata: dateToString(this.time),
+                content: this.divination.content,
+                name: this.divination.name,
+                portrait: this.divination.portrait,
+            }
+            var data = JSON.stringify(params)
 
-            // var params = {
-            //     nowdata: "",
-            //     content: this.divination.content,
-            //     name: this.divination.name,
-            //     portrait: this.divination.portrait,
-            // }
-            // var data = JSON.stringify(params)
+            divinationRecordAdd(data).then(response => {
+                this.dialogVisible = false
 
-            // divinationRecordAdd(data).then(response => {
-            //     this.dialogVisible = false
+                this.$message({
+                    message: '操作Success',
+                    type: 'success'
+                })
 
-            //     this.$message({
-            //         message: '操作Success',
-            //         type: 'success'
-            //     })
-            // })
+                this.total += 1
+                this.refreshList()
+            })
+        },
+        async getCount () {
+            var params = {
+                nowdata: dateToString(this.time),
+            }
+            var data = JSON.stringify(params)
+            divinationRecordCount(data).then(response => {
+                this.total = response.count
+            })
+        },
+        refreshList () {
+            this.listQuery.page = Math.floor((this.total - 1) / this.listQuery.limit) + 1
+            this.getList()
         },
         getList () {
-            this.listLoading = false
-            // this.listLoading = true
+            this.listLoading = true
 
-            // divinationRecordCount().then(response => {
-            //     this.total = response.count
-            // })
+            this.getCount()
 
-            // var start = (this.listQuery.page - 1) * this.listQuery.limit
-            // var end = start + this.listQuery.limit - 1
+            var start = Math.floor(this.listQuery.page - 1) * this.listQuery.limit
+            var end = start + this.listQuery.limit - 1
 
-            // var params = {
-            //     start: start,
-            //     end: end
-            // }
+            var params = {
+                nowdata: dateToString(this.time),
+                start: start,
+                end: end
+            }
+            var data = JSON.stringify(params)
+            divinationRecordGet(data).then(response => {
+                this.list = response.records
 
-            // var data = JSON.stringify(params)
-            // divinationRecordGet(data).then(response => {
-            //     this.list = response.records
+                this.lastpage = 1
+                if (this.list != null) {
+                    this.lastpage = (this.list.length / this.listQuery.limit) + 1
+                }
 
-            //     // Just to simulate the time of the request
-            //     setTimeout(() => {
-            //         this.listLoading = false
-            //     }, 1.5 * 1000)
-            // })
+                // Just to simulate the time of the request
+                setTimeout(() => {
+                    this.listLoading = false
+                }, 1.5 * 1000)
+            })
         },
         handleDelDivination (row) {
             var params = {
-                nowdata: "",
+                nowdata: dateToString(this.time),
                 divinationid: row.divinationid,
             }
             var data = JSON.stringify(params)
@@ -215,10 +248,47 @@ export default {
                     message: '操作Success',
                     type: 'success'
                 })
-                row.status = status
-                row.resulttime = response.resulttime
+                this.total -= 1
+                this.refreshList()
             })
         },
+        handleSetBest (row) {
+            var params = {
+                nowdata: dateToString(this.time),
+                divinationid: row.divinationid,
+            }
+            var data = JSON.stringify(params)
+
+            divinationRecordSetBest(data).then(response => {
+                this.$message({
+                    message: '操作Success',
+                    type: 'success'
+                })
+            })
+        },
+        handleBestDivination () {
+            var params = {
+                nowdata: dateToString(this.time),
+            }
+            var data = JSON.stringify(params)
+
+            divinationGetBest(data).then(response => {
+                this.$message({
+                    message: '操作Success',
+                    type: 'success'
+                })
+
+                this.divination = {
+                    name: response.nickname,
+                    portrait: response.portrait,
+                    content: response.content,
+                    playerid: response.playerid,
+                }
+
+                this.dialogVisible = true
+                this.confirmVisible = false
+            })
+        }
     }
 }
 </script>

@@ -5,10 +5,10 @@ import (
 )
 
 func init() {
-	server.RegisterGetHandle("/divination/record/get", divinationRecordGetHandle)
-	server.RegisterGetHandle("/divination/record/add", divinationRecordAddHandle)
-	server.RegisterGetHandle("/divination/record/del", divinationRecordDelHandle)
-	server.RegisterGetHandle("/divination/record/setbest", divinationRecordSetBestHandle)
-	server.RegisterGetHandle("/divination/getbest", divinationRecordGetBestHandle)
-	server.RegisterGetHandle("/divination/record/count", divinationRecordCountHandle)
+	server.RegisterPostHandle("/divination/record/get", divinationRecordGetHandle)
+	server.RegisterPostHandle("/divination/record/add", divinationRecordAddHandle)
+	server.RegisterPostHandle("/divination/record/del", divinationRecordDelHandle)
+	server.RegisterPostHandle("/divination/record/setbest", divinationRecordSetBestHandle)
+	server.RegisterPostHandle("/divination/getbest", divinationRecordGetBestHandle)
+	server.RegisterPostHandle("/divination/record/count", divinationRecordCountHandle)
 }

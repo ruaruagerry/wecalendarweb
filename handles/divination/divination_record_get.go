@@ -27,7 +27,7 @@ type divinationRecordGetItem struct {
 }
 
 type divinationRecordGetRsp struct {
-	records []*divinationRecordGetItem
+	Records []*divinationRecordGetItem `json:"records"`
 }
 
 func divinationRecordGetHandle(c *server.StupidContext) {
@@ -67,59 +67,67 @@ func divinationRecordGetHandle(c *server.StupidContext) {
 	// do something
 	divinationids, _ := redis.Ints(redisMDArray[0], nil)
 
-	// 先获取吐槽内容
-	conn.Send("MULTI")
-	for _, v := range divinationids {
-		conn.Send("HGET", rconst.HashDivinationPrefix+req.NowData, v)
-	}
-	redisMDArray, err = redis.Values(conn.Do("EXEC"))
-	if err != nil {
-		httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))
-		httpRsp.Msg = proto.String("统一获取缓存操作失败")
-		log.Errorf("code:%d msg:%s redisMDArray Values err, err:%s", httpRsp.GetResult(), httpRsp.GetMsg(), err.Error())
-		return
-	}
-
-	divinationbyteslice, _ := redis.ByteSlices(redisMDArray[0], nil)
-
-	playerids := []string{}
-	for _, v := range divinationbyteslice {
-		tmp := &rconst.Divination{}
-		err := json.Unmarshal(v, tmp)
+	if len(divinationids) > 0 {
+		// 先获取吐槽内容
+		conn.Send("MULTI")
+		for _, v := range divinationids {
+			conn.Send("HGET", rconst.HashDivinationPrefix+req.NowData, v)
+		}
+		redisMDArray, err = redis.Values(conn.Do("EXEC"))
 		if err != nil {
-			httpRsp.Result = proto.Int32(int32(gconst.ErrParse))
-			httpRsp.Msg = proto.String("吐槽解析失败")
-			log.Errorf("code:%d msg:%s divination Unmarshal err, err:%s", httpRsp.GetResult(), httpRsp.GetMsg(), err.Error())
+			httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))
+			httpRsp.Msg = proto.String("统一获取缓存操作失败")
+			log.Errorf("code:%d msg:%s redisMDArray Values err, err:%s", httpRsp.GetResult(), httpRsp.GetMsg(), err.Error())
 			return
 		}
 
-		tmprsp := &divinationRecordGetItem{
-			PlayerID:     tmp.PlayerID,
-			DivinationID: tmp.DivinationID,
-			Time:         time.Unix(tmp.Time, 0).Format("2006-01-02 15:04:05"),
-			Content:      tmp.Content,
+		dslice := [][]byte{}
+		for i := range divinationids {
+			tmpbytes, _ := redis.Bytes(redisMDArray[i], nil)
+			dslice = append(dslice, tmpbytes)
 		}
 
-		rsp.records = append(rsp.records, tmprsp)
-		playerids = append(playerids, tmp.PlayerID)
-	}
+		playerids := []string{}
+		for _, v := range dslice {
+			tmp := &rconst.Divination{}
+			err := json.Unmarshal(v, tmp)
+			if err != nil {
+				httpRsp.Result = proto.Int32(int32(gconst.ErrParse))
+				httpRsp.Msg = proto.String("吐槽解析失败")
+				log.Errorf("code:%d msg:%s divination Unmarshal err, err:%s", httpRsp.GetResult(), httpRsp.GetMsg(), err.Error())
+				return
+			}
 
-	// 再获取玩家信息
-	conn.Send("MULTI")
-	for _, v := range playerids {
-		conn.Send("HGET", rconst.HashAccountPrefix+v, rconst.FieldAccName)
-	}
-	redisMDArray, err = redis.Values(conn.Do("EXEC"))
-	if err != nil {
-		httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))
-		httpRsp.Msg = proto.String("统一获取缓存操作失败")
-		log.Errorf("code:%d msg:%s redisMDArray Values err, err:%s", httpRsp.GetResult(), httpRsp.GetMsg(), err.Error())
-		return
-	}
+			tmprsp := &divinationRecordGetItem{
+				PlayerID:     tmp.PlayerID,
+				DivinationID: tmp.DivinationID,
+				Time:         time.Unix(tmp.Time, 0).Format("2006-01-02 15:04:05"),
+				Content:      tmp.Content,
+			}
 
-	for i := range playerids {
-		name, _ := redis.String(redisMDArray[i], nil)
-		rsp.records[i].NickName = name
+			rsp.Records = append(rsp.Records, tmprsp)
+			playerids = append(playerids, tmp.PlayerID)
+		}
+
+		// 再获取玩家信息
+		conn.Send("MULTI")
+		for _, v := range playerids {
+			conn.Send("HGET", rconst.HashAccountPrefix+v, rconst.FieldAccName)
+		}
+		redisMDArray, err = redis.Values(conn.Do("EXEC"))
+		if err != nil {
+			httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))
+			httpRsp.Msg = proto.String("统一获取缓存操作失败")
+			log.Errorf("code:%d msg:%s redisMDArray Values err, err:%s", httpRsp.GetResult(), httpRsp.GetMsg(), err.Error())
+			return
+		}
+
+		for i := range playerids {
+			name, _ := redis.String(redisMDArray[i], nil)
+			if name != "" {
+				rsp.Records[i].NickName = name
+			}
+		}
 	}
 
 	// rsp

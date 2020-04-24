@@ -43,6 +43,7 @@ func divinationRecordDelHandle(c *server.StupidContext) {
 	// 获取吐槽信息
 	conn.Send("MULTI")
 	conn.Send("HGET", rconst.HashDivinationPrefix+req.NowData, req.DivinationID)
+	conn.Send("GET", rconst.StringDivinationBestPrefix+req.NowData)
 	redisMDArray, err := redis.Values(conn.Do("EXEC"))
 	if err != nil {
 		httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))
@@ -52,6 +53,7 @@ func divinationRecordDelHandle(c *server.StupidContext) {
 	}
 
 	divinationbyte, _ := redis.Bytes(redisMDArray[0], nil)
+	bestdivinationid, _ := redis.Int64(redisMDArray[1], nil)
 
 	divination := &rconst.Divination{}
 	err = json.Unmarshal(divinationbyte, divination)
@@ -64,10 +66,15 @@ func divinationRecordDelHandle(c *server.StupidContext) {
 
 	// redis multi set
 	conn.Send("MULTI")
-	conn.Send("HDET", rconst.HashDivinationPrefix+req.NowData, req.DivinationID)
+	conn.Send("HDEL", rconst.HashDivinationPrefix+req.NowData, req.DivinationID)
 	conn.Send("ZREM", rconst.ZSetDivinationRecordPrefix+req.NowData, req.DivinationID)
-	conn.Send("ZINCRBY", rconst.ZSetDivinationRank, -1, divination.PlayerID)
-	conn.Send("EXPIRE", rconst.ZSetDivinationRank, gfunc.TomorrowZeroRemain())
+	if divination.PlayerID != "" {
+		conn.Send("ZINCRBY", rconst.ZSetDivinationRank, -1, divination.PlayerID)
+		conn.Send("EXPIRE", rconst.ZSetDivinationRank, gfunc.TomorrowZeroRemain())
+	}
+	if req.DivinationID == bestdivinationid {
+		conn.Send("DEL", rconst.StringDivinationBestPrefix+req.NowData)
+	}
 	_, err = conn.Do("EXEC")
 	if err != nil {
 		httpRsp.Result = proto.Int32(int32(gconst.ErrRedis))

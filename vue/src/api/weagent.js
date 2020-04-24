@@ -93,9 +93,10 @@ export function divinationGetBest (data) {
     })
 }
 
-export function divinationRecordCount () {
+export function divinationRecordCount (data) {
     return request({
         url: rootUrl + '/divination/record/count',
-        method: 'get'
+        method: 'post',
+        data
     })
 }
