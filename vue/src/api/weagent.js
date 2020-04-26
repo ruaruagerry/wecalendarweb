@@ -115,3 +115,18 @@ export function divinationConfigFirstSet (data) {
         data
     })
 }
+
+export function ClientConfigGet () {
+    return request({
+        url: rootUrl + '/client/config/get',
+        method: 'get'
+    })
+}
+
+export function ClientConfigSet (data) {
+    return request({
+        url: rootUrl + '/client/config/set',
+        method: 'post',
+        data
+    })
+}

@@ -25,10 +25,10 @@ const weagentRouter = {
             meta: { title: '吐槽列表' }
         },
         {
-            path: 'dynamic-table',
-            component: () => import('@/views/table/dynamic-table/index'),
-            name: 'DynamicTable',
-            meta: { title: 'Dynamic Table' }
+            path: 'client-config',
+            component: () => import('@/views/weAgent/client-config'),
+            name: 'ClientConfig',
+            meta: { title: '客户端配置' }
         },
     ]
 }

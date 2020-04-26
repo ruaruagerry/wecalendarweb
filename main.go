@@ -21,6 +21,7 @@ import (
 	"wecalendarweb/servercfg"
 
 	_ "wecalendarweb/handles/auth"
+	_ "wecalendarweb/handles/client"
 	_ "wecalendarweb/handles/divination"
 	_ "wecalendarweb/handles/file"
 	_ "wecalendarweb/handles/money"
