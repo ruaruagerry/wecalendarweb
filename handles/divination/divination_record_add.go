@@ -66,6 +66,7 @@ func divinationRecordAddHandle(c *server.StupidContext) {
 		Content:      req.Content,
 		Name:         req.Name,
 		Portrait:     req.Portrait,
+		Noname:       false,
 	}
 	databyte, err := json.Marshal(data)
 	if err != nil {

@@ -24,6 +24,7 @@ type divinationRecordGetItem struct {
 	DivinationID int64  `json:"divinationid"`
 	Time         string `json:"time"`
 	Content      string `json:"content"`
+	Noname       bool   `json:"noname"`
 }
 
 type divinationRecordGetRsp struct {
@@ -103,6 +104,7 @@ func divinationRecordGetHandle(c *server.StupidContext) {
 				DivinationID: tmp.DivinationID,
 				Time:         time.Unix(tmp.Time, 0).Format("2006-01-02 15:04:05"),
 				Content:      tmp.Content,
+				Noname:       tmp.Noname,
 			}
 
 			rsp.Records = append(rsp.Records, tmprsp)

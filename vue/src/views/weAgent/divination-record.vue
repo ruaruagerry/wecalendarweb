@@ -79,10 +79,18 @@
                     <span>{{ row.nickname }}</span>
                 </template>
             </el-table-column>
+            <el-table-column label="匿名"
+                             prop="noname"
+                             align="center"
+                             width="70">
+                <template slot-scope="{row}">
+                    <span>{{ row.noname }}</span>
+                </template>
+            </el-table-column>
             <el-table-column label="文本"
                              prop="content"
                              align="center"
-                             width="740">
+                             width="800">
                 <template slot-scope="{row}">
                     <span>{{ row.content }}</span>
                 </template>
@@ -96,7 +104,7 @@
             </el-table-column>
             <el-table-column label="操作"
                              align="center"
-                             width="330"
+                             width="200"
                              class-name="small-padding fixed-width">
                 <template slot-scope="{row}">
                     <el-button size="mini"
