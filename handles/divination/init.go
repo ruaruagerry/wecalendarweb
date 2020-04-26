@@ -11,4 +11,6 @@ func init() {
 	server.RegisterPostHandle("/divination/record/setbest", divinationRecordSetBestHandle)
 	server.RegisterPostHandle("/divination/getbest", divinationRecordGetBestHandle)
 	server.RegisterPostHandle("/divination/record/count", divinationRecordCountHandle)
+	server.RegisterPostHandle("/divination/config/first/set", divinationConfigFirstSetHandle)
+	server.RegisterGetHandle("/divination/config/first/get", divinationConfigFirstGetHandle)
 }

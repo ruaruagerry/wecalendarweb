@@ -8,6 +8,12 @@
                    @click="handleAddDivination">新建吐槽</el-button>
         <el-button type="primary"
                    @click="handleBestDivination">最佳吐槽</el-button>
+        榜首开关
+        <el-switch v-model="first"
+                   @change="handleSetConfigFrist"
+                   active-color="#13ce66"
+                   inactive-color="#ff4949">
+        </el-switch>
 
         <el-dialog :visible.sync="dialogVisible"
                    :title="'New Divination'">
@@ -119,7 +125,8 @@
 import waves from '@/directive/waves' // waves directive
 import { parseTime, dateToString } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { divinationRecordGet, divinationRecordDel, divinationRecordCount, divinationRecordSetBest, divinationRecordAdd, divinationGetBest } from '@/api/weagent'
+import {    divinationRecordGet, divinationRecordDel, divinationRecordCount, divinationRecordSetBest, divinationRecordAdd,
+    divinationGetBest, divinationConfigFirstGet, divinationConfigFirstSet} from '@/api/weagent'
 
 export default {
     name: 'DivinationRecord',
@@ -139,6 +146,7 @@ export default {
     data () {
         return {
             time: new Date(),
+            first: true,
 
             confirmVisible: true,
             dialogVisible: false,
@@ -162,6 +170,7 @@ export default {
         }
     },
     created () {
+        this.getConfig()
         this.getList()
     },
     methods: {
@@ -195,6 +204,12 @@ export default {
 
                 this.total += 1
                 this.refreshList()
+            })
+        },
+        // 获取配置
+        getConfig () {
+            divinationConfigFirstGet().then(response => {
+                this.first = response.first
             })
         },
         // 获取吐槽总数
@@ -296,7 +311,20 @@ export default {
                 this.dialogVisible = true
                 this.confirmVisible = false
             })
-        }
+        },
+        handleSetConfigFrist () {
+            var params = {
+                first: this.first,
+            }
+            var data = JSON.stringify(params)
+
+            divinationConfigFirstSet(data).then(response => {
+                this.$message({
+                    message: '操作Success',
+                    type: 'success'
+                })
+            })
+        },
     }
 }
 </script>

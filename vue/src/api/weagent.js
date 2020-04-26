@@ -100,3 +100,18 @@ export function divinationRecordCount (data) {
         data
     })
 }
+
+export function divinationConfigFirstGet () {
+    return request({
+        url: rootUrl + '/divination/config/first/get',
+        method: 'get'
+    })
+}
+
+export function divinationConfigFirstSet (data) {
+    return request({
+        url: rootUrl + '/divination/config/first/set',
+        method: 'post',
+        data
+    })
+}
